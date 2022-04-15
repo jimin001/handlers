@@ -38,41 +38,41 @@ class VCFHandler:
         """
         return self.header
 
-    def get_reads(self, contigs):
+    def get_records(self, contigs):
         """
         Read in vcf line by line in specified contig region
         """
         # returns iterator object
         return self.vcf.fetch(contig=contigs)
 
-    def get_read_attributes(self, reads, attribute):
+    def get_record_attributes(self, records, attribute):
         """
-        Get specified feature of vcf read.
+        Get specified feature of vcf record.
         """
         # returns generator object of specified attribute
-        for read in reads:
+        for record in records:
             if attribute == 'chrom':
-                yield read.chrom
+                yield record.chrom
             elif attribute == 'pos':
-                yield read.pos
+                yield record.pos
             elif attribute == 'id':
-                yield read.id
+                yield record.id
             elif attribute == 'ref':
-                yield read.ref
+                yield record.ref
             elif attribute == 'alt':
-                yield read.alts
+                yield record.alts
             elif attribute == 'qual':
-                yield read.qual
+                yield record.qual
             elif attribute == 'filter':
-                yield read.filter.keys()
+                yield record.filter.keys()
             elif attribute == 'info':
-                yield read.info.keys()
+                yield record.info.keys()
             elif attribute == 'format':
-                yield read.format.keys()
+                yield record.format.keys()
             elif attribute == 'sample':
-                yield [y.values() for y in read.samples.itervalues()]
+                yield [y.values() for y in record.samples.itervalues()]
 
-    def get_read_samples(self, samples_list, type):
+    def get_record_samples(self, samples_list, type):
         """
         Return generator object of specified data type of sample.
         :param samples_list: samples attribute generator object or list
@@ -106,17 +106,17 @@ if __name__ == '__main__':
     vcf_header = vcf_handler.get_header()
     #print(vcf_header)
 
-    reads = vcf_handler.get_reads(contigs='chr1')
-    #for read in reads:
-        #print(read)
+    records = vcf_handler.get_records(contigs='chr1')
+    #for record in records:
+        #print(record)
 
-    samples_list = vcf_handler.get_read_attributes(reads, 'sample')
+    samples_list = vcf_handler.get_record_attributes(records, 'sample')
     #print(samples_list)
 
-    #print(vcf_handler.get_read_samples(samples_list, 'GT'))
+    #print(vcf_handler.get_record_samples(samples_list, 'GT'))
 
-    # all 'GT'
-    #print([x for x in vcf_handler.get_read_samples(samples_list, 'GT')])
+    # print all 'GT'
+    #print([x for x in vcf_handler.get_record_samples(samples_list, 'GT')])
 
 
 
