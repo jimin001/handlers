@@ -3,7 +3,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf', '-v', type=str, required=True, help='vcf file path')
-parser.add_argument('--vcfindex', '-i', type=str, required=True, help='vcf index file path')
+parser.add_argument('--vcfindex', '-i', type=str, help='vcf index file path')
 parser.add_argument('--outfile', '-o', type=str, help='output file path')
 # if contig argument not given, reads in whole vcf file
 parser.add_argument('--contig', '-c', type=str, help='contig region to read in')
