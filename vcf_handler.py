@@ -4,6 +4,9 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf', '-v', type=str, required=True, help='vcf file path')
 parser.add_argument('--vcfindex', '-i', type=str, required=True, help='vcf index file path')
+parser.add_argument('--outfile', '-o', type=str, help='output file path')
+# if contig argument not given, reads in whole vcf file
+parser.add_argument('--contig', '-c', type=str, help='contig region to read in')
 args = parser.parse_args()
 
 
@@ -28,9 +31,10 @@ class VCFHandler:
     """
     VCF Handler class.
     """
-    def __init__(self, input_vcf_path, input_vcf_index_path):
+    def __init__(self, input_vcf_path, input_vcf_index_path, contig):
         self.vcf = pysam.VariantFile(input_vcf_path, 'r', index_filename=input_vcf_index_path)
         self.header = self.vcf.header
+        self.contig = contig
 
     def get_header(self):
         """
@@ -38,12 +42,12 @@ class VCFHandler:
         """
         return self.header
 
-    def get_records(self, contigs):
+    def get_records(self):
         """
         Read in vcf line by line in specified contig region
         """
         # returns iterator object
-        return self.vcf.fetch(contig=contigs)
+        return self.vcf.fetch(self.contig)
 
     def get_record_attributes(self, records, attribute):
         """
@@ -101,14 +105,15 @@ class VCFHandler:
 if __name__ == '__main__':
     vcf_file = args.vcf
     vcf_index = args.vcfindex
+    contig = args.contig
 
-    vcf_handler = VCFHandler(vcf_file, vcf_index)
+    vcf_handler = VCFHandler(vcf_file, vcf_index, contig)
     vcf_header = vcf_handler.get_header()
     #print(vcf_header)
 
-    records = vcf_handler.get_records(contigs='chr1')
-    #for record in records:
-        #print(record)
+    records = vcf_handler.get_records()
+    for record in records:
+        print(record)
 
     samples_list = vcf_handler.get_record_attributes(records, 'sample')
     #print(samples_list)
