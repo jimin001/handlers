@@ -4,11 +4,18 @@ from vcf_handler import VCFHandler
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf', '-v', type=str, required=True, help='vcf file path')
-parser.add_argument('--vcfindex', '-i', type=str, required=True, help='vcf index file path')
+parser.add_argument('--vcfindex', '-i', type=str, help='vcf index file path')
 parser.add_argument('--outfile', '-o', type=str, help='output file path')
 parser.add_argument('--filter', '-f', type=str, help='filter type to filter out')
+# if contig argument not given, reads in whole vcf file
+parser.add_argument('--contig', '-c', type=str, help='contig region to read in')
 
 args = parser.parse_args()
+
+"""
+running command
+python3 vcf_filter.py 
+"""
 
 def filter_by_filter(records, filter_type):
     """
