@@ -32,10 +32,10 @@ class VCFHandler:
     """
     VCF Handler class.
     """
-    def __init__(self, input_vcf_path, input_vcf_index_path, contig):
+    def __init__(self, input_vcf_path, input_vcf_index_path):
         self.vcf = pysam.VariantFile(input_vcf_path, 'r', index_filename=input_vcf_index_path)
         self.header = self.vcf.header
-        self.contig = contig
+        self.contig = None
 
     def get_header(self):
         """
@@ -108,7 +108,11 @@ if __name__ == '__main__':
     vcf_index = args.vcfindex
     contig = args.contig
 
-    vcf_handler = VCFHandler(vcf_file, vcf_index, contig)
+    vcf_handler = VCFHandler(vcf_file, vcf_index)
+
+    if contig:
+        vcf_handler.contig = contig
+
     vcf_header = vcf_handler.get_header()
     #print(vcf_header)
 

@@ -14,7 +14,7 @@ args = parser.parse_args()
 
 """
 running command
-python3 vcf_filter.py 
+python3 vcf_filter.py -v $VCF -o $OUTPUT -f $FILTER
 """
 
 def filter_by_filter(records, filter_type):
