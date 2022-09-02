@@ -4,8 +4,11 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf', '-v', type=str, required=True, help='vcf file path')
 parser.add_argument('--vcfindex', '-i', type=str, help='vcf index file path')
+parser.add_argument('--vcfnormal', '-n', type=str, required=True, help='normal vcf file path')
+parser.add_argument('--vcfnormalindex', '-z', type=str, help='normal vcf index file path')
 parser.add_argument('--outfile', '-o', type=str, help='output file path')
 parser.add_argument('--filter', '-f', type=str, help='filter type to filter out')
+
 # if contig argument not given, reads in whole vcf file
 parser.add_argument('--contig', '-c', type=str, help='contig region to read in')
 args = parser.parse_args()
@@ -117,6 +120,7 @@ if __name__ == '__main__':
     #print(vcf_header)
 
     records = vcf_handler.get_records()
+
     for record in records:
         print(record)
 
