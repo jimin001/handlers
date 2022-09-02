@@ -21,9 +21,10 @@ parser.add_argument('--contig', '-c', type=str, help='contig region to read in')
 
 args = parser.parse_args()
 
-def filter_out_normal(records, normal_list):
+def filter_out_normal(records, normal_pos_dict):
     for record in records:
-        if record.pos not in normal_list:
+        contig = record.chrom
+        if record.pos not in normal_pos_dict[contig]:
             yield record
 
 if __name__ == '__main__':
@@ -45,23 +46,24 @@ if __name__ == '__main__':
     tumor_pos_list = set()
     tumor_pos_list_filtered = set()
     normal_pos_list = set()
+    normal_pos_dict = {}
 
     # get positions only from records
-    for n in normal_vcf_h.get_record_attributes(normal_records, 'pos'):
-        normal_pos_list.add(n)
-    print(len(normal_pos_list))
+    chromosome = normal_vcf_h.get_record_attributes(normal_records, 'chrom')
+    positions = normal_vcf_h.get_record_attributes(normal_records, 'pos')
+
+    for c,p in zip(chromosome, positions):
+        if c not in normal_pos_dict:
+            normal_pos_dict[c] = set()
+            normal_pos_dict[c].add(p)
+        else:
+            normal_pos_dict[c].add(p)
 
 
-    filtered = filter_out_normal(tumor_records, normal_pos_list)
+    filtered = filter_out_normal(tumor_records, normal_pos_dict)
     for record in filtered:
         out_file.write(record)
 
-#6130958 list normal
-#6023960 set normal
-
-#6023960 normal
-#866309 tumor
-#666457 tumor filtered
 
 
 
